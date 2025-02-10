@@ -1,0 +1,55 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #edf6f9;
+
+}
+.logo {
+    text-decoration: none;
+    color: #3a6cf4;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.8em;
+}
+
+.cards-container {
+    /*kitkhaliw kula juj cards yjiw hda ba3dyathum*/
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+
+    gap: 10px; /* Spacing between cards */
+    padding: 30px;
+    /* list-style: none; */
+}
+
+.card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden; /*kat7yed ny9at dyal kula card*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-align: center;
+    /* width: 20vw; */
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card a {
+    text-decoration: none;
+    display: block;
+}
+
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+}
