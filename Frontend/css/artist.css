@@ -1,148 +1,112 @@
 /* --- Global Styles --- */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', 'Open Sans', sans-serif;
-  }
-  
-  body {
-    background-color: rgba(0, 0, 0, 0.77);
-    color: #fff;
-    line-height: 1.6;
-  }
-  
-  /* إخفاء شريط التمرير */
-  body::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* --- Header --- */
-  header {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    background-color: rgb(5, 5, 75);
-    height: 9vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    animation: slideDown 1s ease-in-out;
-  }
-  
-  .logo {
-    text-decoration: none;
-    font-size: 1.8em;
-    color: rgb(159, 154, 235);
-    font-weight: bold;
-  }
-  
-  /* --- Artist Container --- */
-  .artist-container {
-    padding-top: 100px; /* لتفادي تغطية الهيدر */
-    margin: auto;
-    width: 90%;
-    max-width: 800px;
-    text-align: center;
-  }
-  
-  /* --- Artist Image --- */
-  .artist-img {
-    width: 200px;
-    height: auto;
-    border-radius: 10px;
-    margin: 20px 0;
-    object-fit: cover;
-  }
-  
-  /* --- Artist Details --- */
-  .artist-details {
-    background-color: rgb(5, 5, 75);
-    padding: 20px;
-    border-radius: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeInUp 1s ease-out;
-  }
-  
-  .artist-details p {
-    margin: 10px 0;
-    font-size: 1em;
-  }
-  
-  .artist-details ul {
-    list-style: none;
-    margin: 10px 0;
-    padding: 0;
-  }
-  
-  .artist-details ul li {
-    margin: 5px 0;
-    font-weight: bold;
-    color: rgb(159, 154, 235);
-  }
-  
-  /* --- Footer --- */
-  footer {
-    background-color: #000016;
-    color: #fff;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 40px;
-  }
-  
-  .footer-title {
-    font-size: 1.3em;
-    font-weight: 600;
-  }
-  
-  .footer-title span {
-    color: #3a6cf4;
-  }
-  
-  .social-icons a {
-    color: #fff;
-    margin: 0 5px;
-    transition: color 0.3s ease;
-  }
-  
-  .social-icons a:hover {
-    color: #3a6cf4;
-  }
-  
-  /* --- Animations --- */
-  @keyframes slideDown {
-    0% {
-      opacity: 0;
-      transform: translateY(-100px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* --- Responsive --- */
-  @media (max-width: 768px) {
-    header {
-      height: 12vh;
-    }
-    .artist-container {
-      width: 95%;
-    }
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+}
+body{
+  text-align: center;
+}
+img{
+  margin: 50px auto;
+
+}
+a{
+  text-decoration: none;
+}
+header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: rgb(5, 5, 75);
+  height: 9vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  animation: slideDown 1s ease-in-out;
+}
+.logo {
+  text-decoration: none;
+  font-size: 1.8em;
+  color: rgb(159, 154, 235);
+  font-weight: bold;
+}
+
+
+body {
+  background-color: rgba(0, 0, 0, 0.77);
+  color: #fff;
+  line-height: 1.6;
+}
+
+/* --- Container --- */
+.box {
+  margin: 20px auto;
+  width: 90%;
+  max-width: 800px;
+  padding-top: 50px; /* لضمان عدم تغطية المحتوى في حال وجود هيدر ثابت */
+}
+
+/* --- Info Box --- */
+.info-box {
+  border: 1px solid #3a6cf4;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: rgba(5, 5, 75, 0.7);
+}
+
+/* --- Comment Box --- */
+.comment-box {
+  border: 1px dashed #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: rgba(58, 108, 244, 0.1);
+  text-align: center;
+  font-style: italic;
+}
+
+/* --- Lists داخل info-box --- */
+.info-box ul {
+  list-style: none;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+
+.info-box ul li {
+  margin: 5px 0;
+  font-weight: bold;
+  color: rgb(159, 154, 235);
+}
+footer {
+  background-color: #000016;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.footer-title {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.footer-title span {
+  color: #3a6cf4;
+}
+
+.social-icons a {
+  color: #fff;
+  margin: 0 5px;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #3a6cf4;
+}

@@ -4,34 +4,54 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{.Artist.Name}}</title>
-  <!-- تحميل أيقونات Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <!-- ربط ملف CSS الخاص بصفحة الفنان -->
   <link rel="stylesheet" href="/css/artist.css">
 </head>
 <body>
   <header>
     <a href="/" class="logo">groupie-tracker</a>
   </header>
-
-  <div class="artist-container">
-    <h1>{{.Artist.Name}}</h1>
-    <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" class="artist-img">
-    <div class="artist-details">
+  <h1>{{.Artist.Name}}</h1>
+  <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" style="width:200px;">
+  <div class="box">
+    
+    <!-- Creation Date -->
+    <div class="info-box">
       <p><strong>Creation Date:</strong> {{.Artist.CreationDate}}</p>
+    </div>
+    
+    <!-- First Album -->
+    <div class="info-box">
       <p><strong>First Album:</strong> {{.Artist.FirstAlbum}}</p>
+    </div>
+    
+    <!-- Members -->
+    <div class="info-box">
       <p><strong>Members:</strong></p>
       <ul>
         {{range .Artist.Members}}
           <li>{{.}}</li>
         {{end}}
       </ul>
+    </div>
+    
+    <!-- Locations -->
+    <div class="info-box">
       <p><strong>Locations:</strong></p>
       <ul>
         {{range .Locations}}
           <li>{{.}}</li>
         {{end}}
       </ul>
+    </div>
+    
+    <!-- تعليق بين Locations و Dates -->
+    <div class="comment-box">
+      <p></p>
+    </div>
+    
+    <!-- Dates -->
+    <div class="info-box">
       <p><strong>Dates:</strong></p>
       <ul>
         {{range .Dates}}
@@ -39,8 +59,18 @@
         {{end}}
       </ul>
     </div>
+    
+    <!-- Relations -->
+    <div class="info-box">
+      <p><strong>Relations:</strong></p>
+      <ul>
+        {{range $key, $value := .Relations_map}}
+          <li><strong>{{$key}}:</strong> {{$value}}</li>
+        {{end}}
+      </ul>
+    </div>
+    
   </div>
-
   <footer>
     <p class="footer-title">Copyrights ©<span>azraji</span> @<span>ychatoua</span></p>
     <div class="social-icons">
