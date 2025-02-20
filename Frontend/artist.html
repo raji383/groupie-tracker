@@ -1,39 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.Artist.Name}}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="/css/artist.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{.Artist.Name}}</title>
+  <!-- تحميل أيقونات Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- ربط ملف CSS الخاص بصفحة الفنان -->
+  <link rel="stylesheet" href="/css/artist.css">
 </head>
 <body>
+  <header>
+    <a href="/" class="logo">groupie-tracker</a>
+  </header>
+
+  <div class="artist-container">
     <h1>{{.Artist.Name}}</h1>
-    <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" style="width:200px;">
-    <div class="box">
-        <p><strong>Creation Date:</strong> {{.Artist.CreationDate}}</p>
-        <p><strong>First Album:</strong> {{.Artist.FirstAlbum}}</p>
-        <p><strong>Members:</strong></p>
-        <ul>
-            {{range .Artist.Members}}
-                <li>{{.}}</li>
-            {{end}}
-        </ul>
-    
-        <p>Locations:</p>
-        <ul>
-            {{range .Locations}}
-            <li>{{.}}</li>
-            {{end}}
-        </ul>
-    
-        <p>Dates:</p>
-        <ul>
-            {{range .Dates}}
-            <li>{{.}}</li>
-            {{end}}
-        </ul>
+    <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" class="artist-img">
+    <div class="artist-details">
+      <p><strong>Creation Date:</strong> {{.Artist.CreationDate}}</p>
+      <p><strong>First Album:</strong> {{.Artist.FirstAlbum}}</p>
+      <p><strong>Members:</strong></p>
+      <ul>
+        {{range .Artist.Members}}
+          <li>{{.}}</li>
+        {{end}}
+      </ul>
+      <p><strong>Locations:</strong></p>
+      <ul>
+        {{range .Locations}}
+          <li>{{.}}</li>
+        {{end}}
+      </ul>
+      <p><strong>Dates:</strong></p>
+      <ul>
+        {{range .Dates}}
+          <li>{{.}}</li>
+        {{end}}
+      </ul>
     </div>
-    
+  </div>
+
+  <footer>
+    <p class="footer-title">Copyrights ©<span>azraji</span> @<span>ychatoua</span></p>
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/in/azzeddine-raji-6a0b61346/"><i class="fab fa-linkedin"></i></a>
+      <a href="https://x.com/Azzeddi17634117"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+  </footer>
 </body>
 </html>

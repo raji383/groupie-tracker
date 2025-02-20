@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Groupie Tracker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="/css/index.css">
-   
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groupie Tracker</title>
+  <!-- تحميل أيقونات Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- رابط ملف CSS -->
+  <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-    <!-- <header>
-        <a href="/" class="logo">zone01</a>
-    </header> -->
-    <!-- <div class="image-section">
-        <img src="./css/image1.jpg" alt="Image">
-    </div> -->
-    <ul class="cards-container">
-        {{range .}}
-        <li class="card">
-            <a href="/artist?id={{.ID}}">
-                <img src="{{.Image}}" alt="{{.Name}}">
-                <div class="card-info">
-                    <h3>{{.Name}}</h3>
-                    <p>Created in : {{.CreationDate}}</p>
-                </div>
-            </a>
-        </li>
-        {{end}}
-    </ul>
-
-    <footer>
-        <p>© 2025 @azraji @ychatoua</p>
-    </footer>
-
+  <header>
+    <a href="/" class="logo">groupie-tracker</a>
+  </header>
+  
+  <div class="cards-container">
+    {{range .}}
+      <a href="/artist?id={{.ID}}" class="lien">
+        <div class="card">
+          <img src="{{.Image}}" alt="{{.Name}}" loading="lazy">
+          <div class="card-info">
+            <h3>{{.Name}}</h3>
+            <p>Created in: {{.CreationDate}}</p>
+          </div>
+        </div>
+      </a>
+    {{end}}
+  </div>
+  
+  <footer>
+    <p class="footer-title">Copyrights ©<span>azraji</span> @<span>ychatoua</span></p>
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/in/azzeddine-raji-6a0b61346/"><i class="fab fa-linkedin"></i></a>
+      <a href="https://x.com/Azzeddi17634117"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+  </footer>
 </body>
 </html>
