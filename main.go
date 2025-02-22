@@ -9,6 +9,8 @@ import (
 	// "fmt"
 )
 func main() {
+	http.HandleFunc("/filter", web.FilterHandler)
+
 	// css := http.FileServer(http.Dir("./Frontend/css"))
 	http.HandleFunc("/css/", web.Test)
 	http.HandleFunc("/", web.HomeHandler)

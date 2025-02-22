@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="/css/artist.css">
 </head>
+
 <body>
   <header>
     <a href="/" class="logo">groupie-tracker</a>
@@ -14,63 +16,89 @@
   <h1>{{.Artist.Name}}</h1>
   <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" style="width:200px;">
   <div class="box">
-    
+
     <!-- Creation Date -->
     <div class="info-box">
       <p><strong>Creation Date:</strong> {{.Artist.CreationDate}}</p>
     </div>
-    
+
     <!-- First Album -->
     <div class="info-box">
       <p><strong>First Album:</strong> {{.Artist.FirstAlbum}}</p>
     </div>
-    
+
     <!-- Members -->
     <div class="info-box">
       <p><strong>Members:</strong></p>
       <ul>
         {{range .Artist.Members}}
-          <li>{{.}}</li>
+        <li>{{.}}</li>
         {{end}}
       </ul>
     </div>
-    
+
     <!-- Locations -->
     <div class="info-box">
       <p><strong>Locations:</strong></p>
       <ul>
         {{range .Locations}}
-          <li>{{.}}</li>
+        <li>{{.}}</li>
         {{end}}
       </ul>
     </div>
-    
+
     <!-- تعليق بين Locations و Dates -->
     <div class="comment-box">
       <p></p>
     </div>
-    
+
     <!-- Dates -->
     <div class="info-box">
       <p><strong>Dates:</strong></p>
       <ul>
         {{range .Dates}}
-          <li>{{.}}</li>
+        <li>{{.}}</li>
         {{end}}
       </ul>
     </div>
-    
+
+
     <!-- Relations -->
     <div class="info-box">
       <p><strong>Relations:</strong></p>
       <ul>
         {{range $key, $value := .Relations_map}}
-          <li><strong>{{$key}}:</strong> {{$value}}</li>
+        <li>
+          <span class="relation-key" style="cursor: pointer;">
+            <strong>{{$key}}</strong>
+          </span>
+          <div class="relation-value" style="display: none; margin-top: 5px;">
+            {{$value}}
+          </div>
+        </li>
         {{end}}
       </ul>
     </div>
-    
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var keys = document.querySelectorAll('.relation-key');
+        keys.forEach(function (key) {
+          key.addEventListener('click', function () {
+            var value = this.nextElementSibling;
+            if (value.style.display === "none") {
+              value.style.display = "block";
+            } else {
+              value.style.display = "none";
+            }
+          });
+        });
+      });
+    </script>
+
+
   </div>
+  <map name="Locations"></map>
   <footer>
     <p class="footer-title">Copyrights ©<span>azraji</span> @<span>ychatoua</span></p>
     <div class="social-icons">
@@ -81,4 +109,5 @@
     </div>
   </footer>
 </body>
+
 </html>

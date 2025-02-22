@@ -1,33 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Groupie Tracker</title>
-  <!-- تحميل أيقونات Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <!-- رابط ملف CSS -->
   <link rel="stylesheet" href="/css/index.css">
 </head>
+
 <body>
   <header>
     <a href="/" class="logo">groupie-tracker</a>
+    <div class="filterhandler">
+      <input type="checkbox" name="" id="filter">
+      <label for="">filters</label>
+    </div>
+
   </header>
-  
+
+  <div class="filter-container">
+    <form action="/filter" id="filterForm" method="post" >
+      <!-- Range Filter: Creation Date -->
+      <label>Creation Date from:</label>
+      <input type="date" name="creation_from">
+      <label>to:</label>
+      <input type="date" name="creation_to">
+      <br>
+
+      <!-- Range Filter: First Album Date -->
+      <label>First Album Date from:</label>
+      <input type="date" name="first_album_from">
+      <label>to:</label>
+      <input type="date" name="first_album_to">
+      <br>
+
+      <!-- Range Filter: Number of Members -->
+      <label>Members from:</label>
+      <input type="number" name="min_members" min="0">
+      <label>to:</label>
+      <input type="number" name="max_members" min="0">
+      <br>
+
+      <!-- Check Box Filter: Locations -->
+      <label>Locations:</label><br>
+      <input type="checkbox" name="location" value="Berlin"> Berlin
+      <input type="checkbox" name="location" value="Munich"> Munich
+      <input type="checkbox" name="location" value="Hamburg"> Hamburg
+      <br>
+
+      <button type="submit">Apply Filters</button>
+    </form>
+  </div>
+
   <div class="cards-container">
     {{range .}}
-      <a href="/artist?id={{.ID}}" class="lien">
-        <div class="card">
-          <img src="{{.Image}}" alt="{{.Name}}" loading="lazy">
-          <div class="card-info">
-            <h3>{{.Name}}</h3>
-            <p>Created in: {{.CreationDate}}</p>
-          </div>
+    <a href="/artist?id={{.ID}}" class="lien">
+      <div class="card">
+        <img src="{{.Image}}" alt="{{.Name}}" loading="lazy">
+        <div class="card-info">
+          <h3>{{.Name}}</h3>
+          <p>Created in: {{.CreationDate}}</p>
         </div>
-      </a>
+      </div>
+    </a>
     {{end}}
   </div>
-  
+
   <footer>
     <p class="footer-title">Copyrights ©<span>azraji</span> @<span>ychatoua</span></p>
     <div class="social-icons">
@@ -38,4 +77,5 @@
     </div>
   </footer>
 </body>
+
 </html>

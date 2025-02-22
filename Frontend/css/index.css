@@ -1,157 +1,215 @@
 /* --- Global Styles --- */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+}
+
+body {
+  background-color: rgba(0, 0, 0, 0.77);
+  color: #fff;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Header --- */
+header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: rgb(5, 5, 75);
+  height: 9vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  animation: slideDown 1s ease-in-out;
+}
+
+.logo {
+  text-decoration: none;
+  font-size: 1.8em;
+  color: rgb(159, 154, 235);
+  font-weight: bold;
+}
+body:has(#filter:checked) .filter-container {
+  display: block;
+}
+.filterhandler{
+  position: absolute;
+  right: 5%;
+  display: flex;
+}
+
+/* --- Filter Container --- */
+.filter-container {
+  display: none;
+  width: 90%;
+  max-width: 800px;
+  margin: 110px auto 20px auto;
+  padding: 20px;
+  background-color: rgba(5, 5, 75, 0.9);
+  border-radius: 10px;
+}
+
+.filter-container form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+}
+
+.filter-container label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.filter-container input[type="date"],
+.filter-container input[type="number"] {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.filter-container input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.filter-container button {
+  background-color: #3a6cf4;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-container button:hover {
+  background-color: #2a4bbf;
+}
+
+/* --- Cards Container --- */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding-top: 20px;
+  margin: auto;
+  width: 90%;
+}
+
+/* --- Card --- */
+.card {
+  background-color: rgb(5, 5, 75);
+  border-radius: 15px;
+  margin: 10px;
+  padding: 30px;
+  width: 320px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 1s ease-out;
+}
+
+.card:hover {
+  transform: scale(0.95);
+  box-shadow: 0 8px 15px rgba(5, 5, 75, 0.5);
+}
+
+.card img {
+  width: 200px;
+  height: 220px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.card-info {
+  margin-top: 20px;
+}
+
+.card-info h3,
+.card-info p {
+  font-weight: bold;
+  color: rgb(159, 154, 235);
+}
+
+/* --- Footer --- */
+footer {
+  background-color: #000016;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.footer-title {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.footer-title span {
+  color: #3a6cf4;
+}
+
+.social-icons a {
+  color: #fff;
+  margin: 0 5px;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #3a6cf4;
+}
+
+/* --- Animations --- */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px);
   }
-  
-  body {
-    background-color: rgba(0, 0, 0, 0.77); 
-    color: #fff;
-    line-height: 1.6;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  a{
-    text-decoration: none;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  body::-webkit-scrollbar {
-    display: none;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* --- Header --- */
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
   header {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    background-color: rgb(5, 5, 75);
-    height: 9vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    animation: slideDown 1s ease-in-out;
+    height: 12vh;
   }
-  
-  .logo {
-    text-decoration: none;
-    font-size: 1.8em;
-    color: rgb(159, 154, 235);
-    font-weight: bold;
-  }
-  
-  /* --- Cards Container --- */
-  .cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    padding-top: 100px; 
-    margin: auto;
+  .card {
     width: 90%;
   }
-  
-  /* --- Card --- */
-  .card {
-    background-color: rgb(5, 5, 75);
-    border-radius: 15px;
-    margin: 10px;
-    padding: 30px;
-    width: 320px;
-    text-align: center;
-    display: flex;
+  .cards-container {
     flex-direction: column;
     align-items: center;
-    z-index: 5;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeInUp 1s ease-out;
   }
-  
-  .card:hover {
-    transform: scale(0.95);
-    box-shadow: 0 8px 15px rgba(5, 5, 75, 0.5);
-  }
-  
-  .card img {
-    width: 200px;
-    height: 220px;
-    border-radius: 20px;
-    object-fit: cover;
-  }
-  
-  .card-info {
-    margin-top: 20px;
-  }
-  
-  .card-info h3,
-  .card-info p {
-    font-weight: bold;
-    color: rgb(159, 154, 235);
-  }
-  
-  /* --- Footer --- */
-  footer {
-    background-color: #000016;
-    color: #fff;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 40px;
-  }
-  
-  .footer-title {
-    font-size: 1.3em;
-    font-weight: 600;
-  }
-  
-  .footer-title span {
-    color: #3a6cf4;
-  }
-  
-  .social-icons a {
-    color: #fff;
-    margin: 0 5px;
-    transition: color 0.3s ease;
-  }
-  
-  .social-icons a:hover {
-    color: #3a6cf4;
-  }
-  
-  /* --- Animations --- */
-  @keyframes slideDown {
-    0% {
-      opacity: 0;
-      transform: translateY(-100px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* --- Responsive --- */
-  @media (max-width: 768px) {
-    header {
-      height: 12vh;
-    }
-    .card {
-      width: 90%;
-    }
-    .cards-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-  
+}
