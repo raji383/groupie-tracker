@@ -1,14 +1,38 @@
 package Web
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
+
+func inrang(taem, from, to []string) bool {
+	j := 0
+	for i := 2; i >= 0; i-- {
+		a, _ := strconv.Atoi(taem[j])
+		if j < 3 {
+			j++
+		}
+
+		b, _ := strconv.Atoi(from[i])
+		c, err := strconv.Atoi(to[i])
+		if err != nil {
+			fmt.Println("err", err)
+		}
+		if a < c && a > b {
+			return true
+		} else if a > c && a < b {
+			break
+		}
+	}
+	return false
+}
 
 func FilterHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", 405)
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -23,85 +47,75 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-
-	creationFromStr := r.Form.Get("creation_from")
-	creationToStr := r.Form.Get("creation_to")
-	minMembersStr := r.Form.Get("min_members")
-	maxMembersStr := r.Form.Get("max_members")
-	firstAlbumFromStr := r.Form.Get("first_album_from")
-	firstAlbumToStr := r.Form.Get("first_album_to")
-
-	var creationFrom, creationTo int
-	if creationFromStr != "" {
-		if val, err := strconv.Atoi(creationFromStr); err == nil {
-			creationFrom = val
-		}
-	}
-	if creationToStr != "" {
-		if val, err := strconv.Atoi(creationToStr); err == nil {
-			creationTo = val
-		}
+	var locations Location
+	err = FetchData("https://groupietrackers.herokuapp.com/api/locations", &locations)
+	if err != nil {
+		log.Printf("Error fetching locations: %v", err)
+		http.Error(w, "Internal Server Error11", http.StatusInternalServerError)
+		return
 	}
 
-	minMembers, maxMembers := 0, 1000
-	if minMembersStr != "" {
-		if val, err := strconv.Atoi(minMembersStr); err == nil {
-			minMembers = val
-		}
-	}
-	if maxMembersStr != "" {
-		if val, err := strconv.Atoi(maxMembersStr); err == nil {
-			maxMembers = val
-		}
-	}
+	creationFromStr, _ := strconv.Atoi(r.Form.Get("creation_from"))
+	creationToStr, _ := strconv.Atoi(r.Form.Get("creation_to"))
+	MembersStr, _ := strconv.Atoi(r.Form.Get("members"))
+	firstAlbumFromStr := strings.Split(r.Form.Get("first_album_from"), "-")
+	firstAlbumToStr := strings.Split(r.Form.Get("first_album_to"), "-")
+	location := r.Form.Get("location")
+	var filteredArtists []Artist
 
-	var firstAlbumFrom, firstAlbumTo int
-	if firstAlbumFromStr != "" {
-		if val, err := strconv.Atoi(firstAlbumFromStr); err == nil {
-			firstAlbumFrom = val
-		}
-	}
-	if firstAlbumToStr != "" {
-		if val, err := strconv.Atoi(firstAlbumToStr); err == nil {
-			firstAlbumTo = val
-		}
-	}
 
-	filteredArtists := []Artist{}
-	for _, artist := range artists {
+	for r, i := range artists {
+		x:=true
+		for _, a := range locations.Index {
+			if a.ID == r {
+				for _, j := range a.Locations {
+					if x&& j == location {
+						filteredArtists = append(filteredArtists, i)
+						x=false
+					}
+				}
+			}
+		}
 
-		if creationFrom != 0 && artist.CreationDate < creationFrom {
+		firstAlbum := strings.Split(i.FirstAlbum, "-")
+		if len(firstAlbumFromStr) == 3 && len(firstAlbumToStr) == 3 {
+			if x&&len(firstAlbum) == 3 && inrang(firstAlbum, firstAlbumFromStr, firstAlbumToStr) {
+				filteredArtists = append(filteredArtists, i)
+				x=false
+				continue
+			}
+		}
+
+		if x&&creationFromStr <= i.CreationDate && creationToStr >= i.CreationDate {
+			filteredArtists = append(filteredArtists, i)
+			x=false
 			continue
 		}
-		if creationTo != 0 && artist.CreationDate > creationTo {
+		if x&&len(i.Members) == MembersStr {
+			x=false
+			filteredArtists = append(filteredArtists, i)
 			continue
 		}
+	}
+	if len(filteredArtists)==0 {
+		filteredArtists=artists
+	}
+	var str []string
 
-		numMembers := len(artist.Members)
-		if numMembers < minMembers || numMembers > maxMembers {
-			continue
-		}
-
-		if firstAlbumFrom != 0 || firstAlbumTo != 0 {
-			if len(artist.FirstAlbum) < 4 {
-				continue
-			}
-			albumYear, err := strconv.Atoi(artist.FirstAlbum[:4])
-			if err != nil {
-				continue
-			}
-			if firstAlbumFrom != 0 && albumYear < firstAlbumFrom {
-				continue
-			}
-			if firstAlbumTo != 0 && albumYear > firstAlbumTo {
-				continue
-			}
-		}
-
-		filteredArtists = append(filteredArtists, artist)
+	for _, a := range locations.Index {
+		str = append(str, a.Locations...)
 	}
 
-	err = templates.ExecuteTemplate(w, "index.html", filteredArtists)
+	type Data struct {
+		Artist    []Artist
+		Locations []string `json:"locations"`
+	}
+	data := Data{
+		Artist:    filteredArtists,
+		Locations: str,
+	}
+
+	err = templates.ExecuteTemplate(w, "index.html", data)
 	if err != nil {
 		log.Printf("Template error: %v", err)
 		http.Error(w, "Internal Server Error", 500)

@@ -148,6 +148,9 @@ body:has(#filter:checked) .filter-container {
 
 /* --- Footer --- */
 footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
   background-color: #000016;
   color: #fff;
   padding: 20px;

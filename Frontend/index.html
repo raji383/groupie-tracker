@@ -20,12 +20,12 @@
   </header>
 
   <div class="filter-container">
-    <form action="/filter" id="filterForm" method="post" >
+    <form action="/filter" id="filterForm" method="post">
       <!-- Range Filter: Creation Date -->
       <label>Creation Date from:</label>
-      <input type="date" name="creation_from">
+      <input type="number" name="creation_from" min="1900" max="2100" placeholder="Choose the year">
       <label>to:</label>
-      <input type="date" name="creation_to">
+      <input type="number" name="creation_to" min="1900" max="2100" placeholder="Choose the year">
       <br>
 
       <!-- Range Filter: First Album Date -->
@@ -35,26 +35,33 @@
       <input type="date" name="first_album_to">
       <br>
 
-      <!-- Range Filter: Number of Members -->
-      <label>Members from:</label>
-      <input type="number" name="min_members" min="0">
-      <label>to:</label>
-      <input type="number" name="max_members" min="0">
+      <!-- Checkbox Filter: Number of Members -->
+      <label>Number of Members:</label><br>
+      <input type="checkbox" name="members" value="1"> 1
+      <input type="checkbox" name="members" value="2"> 2
+      <input type="checkbox" name="members" value="3"> 3
+      <input type="checkbox" name="members" value="4"> 4
+      <input type="checkbox" name="members" value="5"> 5
+      <input type="checkbox" name="members" value="more"> More than 5
       <br>
 
-      <!-- Check Box Filter: Locations -->
-      <label>Locations:</label><br>
-      <input type="checkbox" name="location" value="Berlin"> Berlin
-      <input type="checkbox" name="location" value="Munich"> Munich
-      <input type="checkbox" name="location" value="Hamburg"> Hamburg
+      <!-- Select Filter: Locations -->
+      <label for="location">Locations:</label><br>
+      <select name="location" id="location">
+        {{range .Locations}}
+        <option value=""></option>
+          <option value="{{.}}">{{.}}</option>
+        {{end}}
+      </select>
       <br>
 
       <button type="submit">Apply Filters</button>
     </form>
+
   </div>
 
   <div class="cards-container">
-    {{range .}}
+    {{range .Artist}}
     <a href="/artist?id={{.ID}}" class="lien">
       <div class="card">
         <img src="{{.Image}}" alt="{{.Name}}" loading="lazy">

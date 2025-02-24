@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 )
+
 // this function Serves the home page by fetching artists data for the home page
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
@@ -13,7 +14,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", 405)
+		http.Error(w, "Method not allowed", http.StatusNotFound)
 		return
 	}
 	var artists []Artist
@@ -23,12 +24,32 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
+	var locations Location
+	err = FetchData("https://groupietrackers.herokuapp.com/api/locations", &locations)
+	if err != nil {
+		log.Printf("Error fetching locations: %v", err)
+		http.Error(w, "Internal Server Error11", http.StatusInternalServerError)
+		return
+	}
 	if err1 != nil {
 		log.Printf("Internal server error: %v", err1)
 		http.Error(w, "Internal Server Error", 500)
 		return
 	}
-	err = templates.ExecuteTemplate(w, "index.html", artists)
+	var str []string
+	for _, a := range locations.Index {
+		str = append(str, a.Locations...)
+	}
+	type Data struct {
+		Artist    []Artist
+		Locations []string `json:"locations"`
+	}
+	data := Data{
+		Artist:    artists,
+		Locations: str,
+	}
+
+	err = templates.ExecuteTemplate(w, "index.html", data)
 	if err != nil {
 		log.Printf("Template error: %v", err)
 		http.Error(w, "Internal Server Error", 500)
@@ -38,7 +59,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 // this function prepare the data for the artist page
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		http.Error(w, "error 405: Method not allowed", 405)
+		http.Error(w, "error 405: Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	artistID := r.URL.Query().Get("id")
