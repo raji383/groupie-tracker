@@ -10,6 +10,7 @@ import (
 )
 func main() {
 	http.HandleFunc("/filter", web.FilterHandler)
+	http.HandleFunc("/search", web.SearchHandler)
 
 	// css := http.FileServer(http.Dir("./Frontend/css"))
 	http.HandleFunc("/css/", web.Test)

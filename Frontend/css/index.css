@@ -43,6 +43,11 @@ header {
 body:has(#filter:checked) .filter-container {
   display: block;
 }
+.search{
+  position: absolute;
+  left: 5%;
+
+}
 .filterhandler{
   position: absolute;
   right: 5%;

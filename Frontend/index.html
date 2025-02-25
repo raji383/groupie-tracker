@@ -12,6 +12,18 @@
 <body>
   <header>
     <a href="/" class="logo">groupie-tracker</a>
+    <div class="search">
+        <form action="/search">
+            <datalist id="data">
+              {{range .Locations}}
+              <option value="{{.}}">{{.}}</option>
+            {{end}}
+            </datalist>
+            <input type="search" name="searched" placeholder="search..." list="data" >🎸
+        </form>
+    </div>
+   
+    
     <div class="filterhandler">
       <input type="checkbox" name="" id="filter">
       <label for="">filters</label>
@@ -48,8 +60,8 @@
       <!-- Select Filter: Locations -->
       <label for="location">Locations:</label><br>
       <select name="location" id="location">
-        {{range .Locations}}
         <option value=""></option>
+        {{range .Locations}}
           <option value="{{.}}">{{.}}</option>
         {{end}}
       </select>
@@ -75,7 +87,7 @@
   </div>
 
   <footer>
-    <p class="footer-title">Copyrights ©<span>azraji</span> @<span>ychatoua</span></p>
+    <p class="footer-title">Copyrights ©<span><a href="https://github.com/raji383">azraji</a></span> @<span><a href="https://learn.zone01oujda.ma/git/ychatoua">ychatoua</a></span></p>
     <div class="social-icons">
       <a href="https://www.linkedin.com/in/azzeddine-raji-6a0b61346/"><i class="fab fa-linkedin"></i></a>
       <a href="https://x.com/Azzeddi17634117"><i class="fab fa-twitter"></i></a>
