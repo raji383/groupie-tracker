@@ -31,93 +31,117 @@ func inrang(taem, from, to []string) bool {
 }
 
 func FilterHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
+    if r.Method != http.MethodPost {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
 
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
+    if err := r.ParseForm(); err != nil {
+        http.Error(w, "Bad Request", http.StatusBadRequest)
+        return
+    }
 
-	var artists []Artist
-	err := FetchData("https://groupietrackers.herokuapp.com/api/artists", &artists)
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	var locations Location
-	err = FetchData("https://groupietrackers.herokuapp.com/api/locations", &locations)
-	if err != nil {
-		log.Printf("Error fetching locations: %v", err)
-		http.Error(w, "Internal Server Error11", http.StatusInternalServerError)
-		return
-	}
+    
+    var artists []Artist
+    err := FetchData("https://groupietrackers.herokuapp.com/api/artists", &artists)
+    if err != nil {
+        http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+        return
+    }
 
-	creationFromStr, _ := strconv.Atoi(r.Form.Get("creation_from"))
-	creationToStr, _ := strconv.Atoi(r.Form.Get("creation_to"))
-	MembersStr, _ := strconv.Atoi(r.Form.Get("members"))
-	firstAlbumFromStr := strings.Split(r.Form.Get("first_album_from"), "-")
-	firstAlbumToStr := strings.Split(r.Form.Get("first_album_to"), "-")
-	location := r.Form.Get("location")
-	var filteredArtists []Artist
+    var locData Location
+    err = FetchData("https://groupietrackers.herokuapp.com/api/locations", &locData)
+    if err != nil {
+        log.Printf("Error fetching locations: %v", err)
+        http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+        return
+    }
+
+    creationFromStr, _ := strconv.Atoi(r.Form.Get("creation_from"))
+    creationToStr, _ := strconv.Atoi(r.Form.Get("creation_to"))
+    MembersStr, _ := strconv.Atoi(r.Form.Get("members"))
+
+    firstAlbumFromStr := strings.Split(r.Form.Get("first_album_from"), "-")
+    firstAlbumToStr := strings.Split(r.Form.Get("first_album_to"), "-")
+    locationFilter := r.Form.Get("location")
+
+    var filteredArtists []Artist
+
+    for _, artist := range artists {
+        passes := true
+
+        
+        if creationFromStr != 0 && creationToStr != 0 {
+            if artist.CreationDate < creationFromStr || artist.CreationDate > creationToStr {
+                passes = false
+            }
+        }
+
+        if MembersStr != 0 {
+            if MembersStr == 6 { 
+                if len(artist.Members) < 6 {
+                    passes = false
+                }
+            } else {
+                if len(artist.Members) != MembersStr {
+                    passes = false
+                }
+            }
+        }
+
+        if len(firstAlbumFromStr) == 3 && len(firstAlbumToStr) == 3 {
+            firstAlbumParts := strings.Split(artist.FirstAlbum, "-")
+            if len(firstAlbumParts) == 3 && !inrang(firstAlbumParts, firstAlbumFromStr, firstAlbumToStr) {
+                passes = false
+            }
+        }
+
+        if locationFilter != "" {
+            var artistLocationFound bool
+            
+            for _, loc := range locData.Index {
+                if loc.ID == artist.ID {
+                    for _, locName := range loc.Locations {
+                        if locName == locationFilter {
+                            artistLocationFound = true
+                            break
+                        }
+                    }
+                    break
+                }
+            }
+            if !artistLocationFound {
+                passes = false
+            }
+        }
+
+        if passes {
+            filteredArtists = append(filteredArtists, artist)
+        }
+    }
 
 
-	for r, i := range artists {
-		x:=true
-		for _, a := range locations.Index {
-			if a.ID == r {
-				for _, j := range a.Locations {
-					if x&& j == location {
-						filteredArtists = append(filteredArtists, i)
-						x=false
-					}
-				}
-			}
-		}
+    if len(filteredArtists) == 0 {
+        filteredArtists = artists
+    }
 
-		firstAlbum := strings.Split(i.FirstAlbum, "-")
-		if len(firstAlbumFromStr) == 3 && len(firstAlbumToStr) == 3 {
-			if x&&len(firstAlbum) == 3 && inrang(firstAlbum, firstAlbumFromStr, firstAlbumToStr) {
-				filteredArtists = append(filteredArtists, i)
-				x=false
-				continue
-			}
-		}
+    var allLocations []string
+    for _, loc := range locData.Index {
+        allLocations = append(allLocations, loc.Locations...)
+    }
 
-		if x&&creationFromStr <= i.CreationDate && creationToStr >= i.CreationDate {
-			filteredArtists = append(filteredArtists, i)
-			x=false
-			continue
-		}
-		if x&&len(i.Members) == MembersStr {
-			x=false
-			filteredArtists = append(filteredArtists, i)
-			continue
-		}
-	}
-	if len(filteredArtists)==0 {
-		filteredArtists=artists
-	}
-	var str []string
+    type Data struct {
+        Artist    []Artist
+        Locations []string `json:"locations"`
+    }
+    data := Data{
+        Artist:    filteredArtists,
+        Locations: allLocations,
+    }
 
-	for _, a := range locations.Index {
-		str = append(str, a.Locations...)
-	}
-
-	type Data struct {
-		Artist    []Artist
-		Locations []string `json:"locations"`
-	}
-	data := Data{
-		Artist:    filteredArtists,
-		Locations: str,
-	}
-
-	err = templates.ExecuteTemplate(w, "index.html", data)
-	if err != nil {
-		log.Printf("Template error: %v", err)
-		http.Error(w, "Internal Server Error", 500)
-	}
+    err = templates.ExecuteTemplate(w, "index.html", data)
+    if err != nil {
+        log.Printf("Template error: %v", err)
+        http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+    }
 }
