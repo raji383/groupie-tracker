@@ -11,7 +11,7 @@ body{
 }
 
 .text{
-    font-size: 30px;
+    font-size: 20px;
     position:absolute; 
     top: 10%;
     color:#ffffff;
@@ -30,10 +30,25 @@ a {
     color: #ffffff;
     padding: 10px;
     position: absolute;
-    bottom: 70%;
+    bottom: 60%;
     right: 50%;
     transform: translateX(50%);
     font-family: 'Courier New', Courier, monospace;
+}
+.astronaut p{
+    position: absolute;
+ text-align:center;
+
+color: rgb(255, 0, 0);
+font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; 
+font-size: 110px;
+top:35%;
+right: 50%;
+transform: translateX(50%);
+
+
+
+
 }
 
 a:hover{
@@ -46,7 +61,7 @@ a:hover{
 
 .astronaut img{
     border-radius: 10px;
-    width:400px;
+    width:80px;
     position:absolute; /* kandiro  position absulute  bach  nt7akmo f abnaaa dyal div*/
 
     top:55%;
@@ -84,7 +99,7 @@ a:hover{
     }
 
     .astronaut img {
-        width: 250px;  
+        width: 25px;  
         top: 70%;
     }
 
@@ -96,6 +111,10 @@ a:hover{
     .text {
         top: 5%;
     }
+    .astronaut p{
+        font-size: 30px;
+    }
+
 }
 @media only screen and (max-width: 175px) {
     h1 {
@@ -103,7 +122,7 @@ a:hover{
     }
 
     .astronaut img {
-        width: 100px;  
+        width: 10px;  
         top: 70%;
     }
 
@@ -113,6 +132,12 @@ a:hover{
     }
 
     .text {
+        padding: 2px;
         top: 5%;
+    }
+    .astronaut p{
+        font-size: 10px;
+        top: 80%;
+
     }
 }
