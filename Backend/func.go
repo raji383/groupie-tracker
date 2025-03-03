@@ -6,34 +6,81 @@ import (
 	"strconv"
 	"strings"
 )
+// بنية بيانات الأخطاء لتسهيل تمريرها للقالب
+type ErrorData struct {
+	Errr    int
+	Kalma string
+}
+
+// عرض صفحة الخطأ
+func renderErrorPage(w http.ResponseWriter, statusCode int, message string) {
+	data := ErrorData{
+		Errr:    statusCode,
+		Kalma: message,
+	}
+
+	w.WriteHeader(statusCode)
+	if err := templates.ExecuteTemplate(w, "error.html", data); err != nil {
+		http.Error(w, message, statusCode)
+	}
+}
 
 // this function Serves the home page by fetching artists data for the home page
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.Error(w, "Page not found", 404)
+		
+		data := struct {
+			Errr    int
+			Kalma string
+		}{
+			Errr:    404,
+			Kalma: "Page not found",
+		}
+	
+		
+		w.WriteHeader(http.StatusNotFound)
+		
+
+		if err := templates.ExecuteTemplate(w, "error.html", data); err != nil {
+		
+			http.Error(w, "Page not found", http.StatusNotFound)
+		}
 		return
 	}
+	
 	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusNotFound)
+		data := struct {
+			Errr    int
+			Kalma string
+		}{
+			Errr:    405,
+			Kalma: "Method Not Allowed",
+		}
+	
+		
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		
+
+		if err := templates.ExecuteTemplate(w, "error.html", data); err != nil {
+		
+			http.Error(w, "Page not found", http.StatusNotFound)
+		}
 		return
 	}
 	var artists []Artist
 	err := FetchData("https://groupietrackers.herokuapp.com/api/artists", &artists)
 	if err != nil {
-		log.Printf("Error fetching data: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	var locations Location
 	err = FetchData("https://groupietrackers.herokuapp.com/api/locations", &locations)
 	if err != nil {
-		log.Printf("Error fetching locations: %v", err)
-		http.Error(w, "Internal Server Error11", http.StatusInternalServerError)
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	if err1 != nil {
-		log.Printf("Internal server error: %v", err1)
-		http.Error(w, "Internal Server Error", 500)
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	var str []string
@@ -51,15 +98,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = templates.ExecuteTemplate(w, "index.html", data)
 	if err != nil {
-		log.Printf("Template error: %v", err)
-		http.Error(w, "Internal Server Error", 500)
+		renderErrorPage(w,500,"itrnal sirval error")
 	}
 }
 
 // this function prepare the data for the artist page
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		http.Error(w, "error 405: Method not allowed", http.StatusMethodNotAllowed)
+		renderErrorPage(w,405,"Method Not Allowed")
 		return
 	}
 	artistID := r.URL.Query().Get("id")
@@ -67,39 +113,35 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(splitted[0])
 	if err != nil || id < 0 {
 		// log.Printf("Page not found: %v", err)
-		http.Error(w, "Bad request", 400)
+		renderErrorPage(w,400,"bad requst")
 		return
 	}
 	// fetching artist's data
 	var artists []Artist
 	err = FetchData("https://groupietrackers.herokuapp.com/api/artists", &artists)
 	if err != nil {
-		log.Printf("Error fetching artists: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	// fetching Locations' data
 	var locations Location
 	err = FetchData("https://groupietrackers.herokuapp.com/api/locations", &locations)
 	if err != nil {
-		log.Printf("Error fetching locations: %v", err)
-		http.Error(w, "Internal Server Error11", http.StatusInternalServerError)
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	// fetching Dates' data
 	var dates Date
 	err = FetchData("https://groupietrackers.herokuapp.com/api/dates", &dates)
 	if err != nil {
-		log.Printf("Error fetching dates: %v", err)
-		http.Error(w, "Internal Server Error2", http.StatusInternalServerError)
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	// fetching Relations' data
 	var relations Relation
 	err = FetchData("https://groupietrackers.herokuapp.com/api/relation", &relations)
 	if err != nil {
-		log.Printf("Error fetching relations: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	// Preparing artist's data to be returned
@@ -111,8 +153,8 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	// check the artist's id
-	if artist.ID == 0 {
-		http.Error(w, "Artist not found", http.StatusNotFound)
+	if artist.ID == 0 {		
+		renderErrorPage(w,404,"not found")
 		return
 	}
 	// Preparing artist's data to be returned
@@ -127,7 +169,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if location.ID == 0 {
-		http.Error(w, "Artist not found", http.StatusNotFound)
+		renderErrorPage(w,404,"not found")
 		return
 	}
 	// Preparing Dates' data to be returned
@@ -142,7 +184,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if wakt.ID == 0 {
-		http.Error(w, "Page not found", http.StatusNotFound)
+		renderErrorPage(w,404,"not found")
 		return
 	}
 	// Preparing Relations' data to be returned
@@ -171,13 +213,14 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// checking errors
 	if err1 != nil {
-		log.Printf("Internal server error: %v", err1)
-		http.Error(w, "Internal Server Error", 500)
+		
+		renderErrorPage(w,500,"itrnal sirval error")
 		return
 	}
 	// check if the user's input has the artist is + another link
 	if len(splitted) >= 2 {
-		http.Error(w, "Page not found", 404)
+		
+		renderErrorPage(w,404,"not fund")
 		return
 	}
 	err = templates.ExecuteTemplate(w, "artist.html", data)

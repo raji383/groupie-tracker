@@ -1,0 +1,118 @@
+body{
+    margin:0;
+    padding:0;
+    font-family: 'Tomorrow', sans-serif;
+    height:100vh;
+    background-image: linear-gradient(to top, #2e1753, #1f1746, #131537, #0d1028, #050819);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.text{
+    font-size: 30px;
+    position:absolute; 
+    top: 10%;
+    color:#ffffff;
+    text-align:center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1{
+    font-size:50px;
+}
+
+a {
+    text-decoration: none;
+    border: solid #ffffff;
+    border-radius: 10px;
+    color: #ffffff;
+    padding: 10px;
+    position: absolute;
+    bottom: 70%;
+    right: 50%;
+    transform: translateX(50%);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+a:hover{
+    background-color: #ffffff;
+    color: #050819;
+    font-family: 'Courier New', Courier, monospace;
+
+    
+}
+
+.astronaut img{
+    border-radius: 10px;
+    width:400px;
+    position:absolute; /* kandiro  position absulute  bach  nt7akmo f abnaaa dyal div*/
+
+    top:55%;
+    animation:astronautFly 6s infinite linear ;   /*  linear  ki3ni  ana sor3A  atkon tabta  makatzad  makatbtaaa */
+   
+
+}
+
+
+@keyframes astronautFly{
+    0%{
+      left:-110px;
+    }
+    25%{
+      top:50%;
+      transform:rotate(30deg);
+    }
+    50%{
+      transform:rotate(40deg);
+      top:55%;
+    }
+    75%{
+      top:60%;
+      transform:rotate(30deg);
+    }
+    100%{
+      left:100%;
+      transform:rotate(45deg);
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    h1 {
+        font-size: 35px;
+    }
+
+    .astronaut img {
+        width: 250px;  
+        top: 70%;
+    }
+
+    a {
+        bottom: 70%;
+        font-size: 14px;  
+    }
+
+    .text {
+        top: 5%;
+    }
+}
+@media only screen and (max-width: 175px) {
+    h1 {
+        font-size: 35px;
+    }
+
+    .astronaut img {
+        width: 100px;  
+        top: 70%;
+    }
+
+    a {
+        bottom: 60%;
+        font-size: 14px;  
+    }
+
+    .text {
+        top: 5%;
+    }
+}
