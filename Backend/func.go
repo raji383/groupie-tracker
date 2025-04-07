@@ -6,13 +6,11 @@ import (
 	"strconv"
 	"strings"
 )
-// بنية بيانات الأخطاء لتسهيل تمريرها للقالب
 type ErrorData struct {
 	Errr    int
 	Kalma string
 }
 
-// عرض صفحة الخطأ
 func renderErrorPage(w http.ResponseWriter, statusCode int, message string) {
 	data := ErrorData{
 		Errr:    statusCode,
